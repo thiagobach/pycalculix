@@ -259,10 +259,10 @@ class Point(base_classes.Idobj):
         """Returns string listing object type, id number, and coordinates"""
         val = 'Point %s, (x, y)=(%.3f, %.3f)' % (self.get_name(), self.x, self.y)
         return val
-    
+
     def set_esize(self, size):
         self.esize = size
-        
+
 
 
 class Line(base_classes.Idobj):
@@ -357,7 +357,7 @@ class Line(base_classes.Idobj):
             ediv (int): number of required elements on this line
         """
         self.ediv = ediv
-        
+
     def set_esize(self, esize):
         """Sets the size of mesh elements on the line when meshing.
 
@@ -689,11 +689,11 @@ class SignLine(Line, base_classes.Idobj):
     def set_ediv(self, ediv):
         """Applies the element divisions onto the parent line."""
         self.line.set_ediv(ediv)
-        
+
     def set_esize(self, esize):
         """Applies the element size onto the parent line."""
         self.line.set_esize(esize)
-        
+
     def set_lineloop(self, lineloop):
         """Sets the parent LineLoop"""
         # this is needed to cascade set ediv up to FEA model and down onto
@@ -887,7 +887,7 @@ class Arc(base_classes.Idobj):
         """This stores this line in the line's child points."""
         for point in self.allpoints:
             point.save_line(self)
-        
+
     def set_ediv(self, ediv):
         """Sets the number of element divisions on the arc when meshing.
 
@@ -895,17 +895,17 @@ class Arc(base_classes.Idobj):
             ediv (int): number of required elements on this arc
         """
         self.ediv = ediv
-        
+
     def set_esize(self, esize):
         """Sets the size of mesh elements on the arc when meshing.
 
         Args:
             esize (float): size of mesh elements on this arc
         """
-        
+
         for i in range(2):
             self.pt(i).set_esize(esize)
-        
+
     def signed_copy(self, sign):
         """Returns a SignArc instance of this Arc with the passed sign."""
         return SignArc(self, sign)
@@ -1284,7 +1284,7 @@ class SignArc(Arc, base_classes.Idobj):
     def set_ediv(self, ediv):
         """Apply the element divisions onto the parent line."""
         self.line.set_ediv(ediv)
-        
+
     def set_esize(self, esize):
         """Applies the element size onto the parent line."""
         self.line.set_esize(esize)
@@ -1974,26 +1974,22 @@ class Area(base_classes.Idobj):
             lnew (SignLine or SignArc): the new line we will insert
             after (bool): if True insert lnew after lgiven, false insert before
 
-        Returns:
-            bool: True if succeeded, False if failed
         """
-        if lgiven in self.signlines:
-            print('Inserting line %s into area %s next to %s' %
-                  (lnew.get_name(), self.get_name(), lgiven.get_name()))
-            lineloop = lgiven.lineloop
-            type = 'exterior lines'
-            if lineloop.hole:
-                type = 'hole lines'
-            ind = lineloop.index(lgiven)
-            if after:
-                ind += 1
-            print(' Inserting line into %s outer lines' % self.get_name())
-            lineloop.insert(ind, lnew)
-            return True
-        else:
-            print('ERROR: Passed line was not in %s!' % self.get_name())
-            print('You must pass a line in this area!')
-            return False
+        if lgiven not in self.signlines:
+            msg = 'Passed line was not in %s!\n' % self.get_name()
+            msg += 'You must pass a line in this area!'
+            raise NameError(msg)
+        print('Inserting line %s into area %s next to %s' %
+              (lnew.get_name(), self.get_name(), lgiven.get_name()))
+        lineloop = lgiven.lineloop
+        type = 'exterior lines'
+        if lineloop.hole:
+            type = 'hole lines'
+        ind = lineloop.index(lgiven)
+        if after:
+            ind += 1
+        print(' Inserting line into %s outer lines' % self.get_name())
+        lineloop.insert(ind, lnew)
 
     def set_child_ccxtypes(self):
         """Assigns the child element ccx types."""
@@ -2015,7 +2011,7 @@ class Area(base_classes.Idobj):
         """
         self.etype = etype
         self.set_child_ccxtypes()
-        
+
     def set_esize(self, esize):
         """Sets the size of mesh elements on the area when meshing.
 

@@ -264,6 +264,8 @@ Initial Release: December 2014
   - Many methods and variables made private to clean up name space.
 
 ## Developer Todo:
+- on win32 in problem.py, is `__fix_frd` still needed?
+- if it is, fix the error message in it
 - confirm that set_ediv still works, remove the past merge if that broke it
 - add images to the readme
 - add new release on github release branch

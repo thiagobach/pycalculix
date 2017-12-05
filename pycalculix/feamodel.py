@@ -1010,15 +1010,14 @@ class FeaModel(object):
                          'LineLoop': 'lineloops',
                          'Area': 'areas',
                          'Part': 'parts'}
-        if class_name in class_to_list:
-            list_name = class_to_list[class_name]
-            getattr(self, list_name).append(item)
-        else:
-            print('ERROR: the item you passed must be a geometry item!')
+        if class_name not in class_to_list:
+            print('The item you passed must be a geometry item!')
             print('You passed a %s' % class_name)
             message = ("Allowed items: Point, Line, Arc, SignLine, SignArc, "
                        "LineLoop, Area, Part")
-            print(message)
+            raise TypeError(msg)
+        list_name = class_to_list[class_name]
+        getattr(self, list_name).append(item)
 
     def __add_load(self, load, time):
         """Adds a load to the FeaModel.
