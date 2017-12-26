@@ -7,7 +7,7 @@ dist:
 	make dist_docs
 	make dist_examples
 
-clean_examples:
+clean:
 	rm -f ./examples/*.fbd
 	rm -f ./examples/*.inp
 	rm -f ./examples/*.geo
@@ -18,6 +18,16 @@ clean_examples:
 	rm -f ./examples/*.cvg
 	rm -f ./examples/*.sta
 	rm -f ./examples/*.out
+	rm -f *.fbd
+	rm -f *.inp
+	rm -f *.geo
+	rm -f *.msh
+	rm -f *.frd
+	rm -f *.dat
+	rm -f *.png
+	rm -f *.cvg
+	rm -f *.sta
+	rm -f *.out
 
 dist_examples:
 	make clean_examples

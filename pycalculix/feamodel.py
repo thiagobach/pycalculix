@@ -1769,7 +1769,8 @@ class FeaModel(object):
         if self.eshape == 'quad':
             geo.append('Mesh.RecombineAll = 1; //turns on quads')
             geo.append('Mesh.SubdivisionAlgorithm = 1; // quadrangles only')
-            #geo.append('Mesh.RecombinationAlgorithm = 1; //turns on blossom needed for quad')
+            geo.append('Mesh.RecombinationAlgorithm = 0; //standard')
+            # geo.append('Mesh.RecombinationAlgorithm = 1; //blossom, needed for quad')
 
         order = self.eorder
         geo.append('Mesh.CharacteristicLengthExtendFromBoundary = 1;')
@@ -1778,8 +1779,12 @@ class FeaModel(object):
         # use this so small circles are meshed finely
         geo.append('Mesh.CharacteristicLengthFromCurvature = 1;')
         geo.append('Mesh.CharacteristicLengthFromPoints = 1;')
-        geo.append('Mesh.Algorithm = 2; //delauny') #okay for quads
-        # geo.append('Mesh.Algorithm = 8; //delquad = delauny for quads')
+        # geo.append('Mesh.Algorithm = 1; //MeshAdapt')
+        # geo.append('Mesh.Algorithm = 2; //automatic') #okay for quads
+        # geo.append('Mesh.Algorithm = 5; //Delaunay')
+        # geo.append('Mesh.Algorithm = 6; //Frontal')
+        # geo.append('Mesh.Algorithm = 7; //BAMG')
+        geo.append('Mesh.Algorithm = 8; //DelQuad = delauny for quads')
         geo.append('Mesh.ElementOrder = '
                    +str(order)
                    +'; //linear or second set here')
